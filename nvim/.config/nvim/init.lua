@@ -138,6 +138,16 @@ require('lazy').setup({
     end,
   },
 
+  -- Buffer list popup
+  {
+    'EL-MASTOR/bufferlist.nvim',
+    lazy = true,
+    keys = { { '<leader><Tab>', '<cmd>BufferList<cr>', desc = 'Buffer List' } },
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    cmd = 'BufferList',
+    opts = {},
+  },
+
   -- Fuzzy finder
   {
     'nvim-telescope/telescope.nvim',

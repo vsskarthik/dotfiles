@@ -1,23 +1,19 @@
-# Aerospace config — minimal, tiling, linux-like
-
-after-login-command = []
-after-startup-command = []
+config-version = 2
 
 start-at-login = true
 
 enable-normalization-flatten-containers = true
 enable-normalization-opposite-orientation-for-nested-containers = true
 
-accordion-padding = 30
+key-mapping.preset = 'qwerty'
 
 default-root-container-layout = 'tiles'
 default-root-container-orientation = 'auto'
 
-key-mapping.preset = 'qwerty'
+# Mouse warps to focused window center on monitor switch
+on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
 
-# No animation
-[animations]
-enabled = false
+accordion-padding = 30
 
 [gaps]
 inner.horizontal = 8
@@ -27,29 +23,53 @@ outer.right = 8
 outer.top = 8
 outer.bottom = 8
 
+# ── Workspace to monitor assignments ─────────────────────────
+# 1-3: main monitor  4-9: secondary monitor
+[workspace-to-monitor-force-assignment]
+1 = 'main'
+2 = 'main'
+3 = 'main'
+4 = 'secondary'
+5 = 'secondary'
+6 = 'secondary'
+
+# ── Main mode keybindings ────────────────────────────────────
 [mode.main.binding]
+
 # Focus
 alt-h = 'focus left'
-alt-l = 'focus right'
-alt-k = 'focus up'
 alt-j = 'focus down'
+alt-k = 'focus up'
+alt-l = 'focus right'
 
-# Move
+# Move windows
 alt-shift-h = 'move left'
-alt-shift-l = 'move right'
-alt-shift-k = 'move up'
 alt-shift-j = 'move down'
-
-# Split
-alt-slash = 'layout tiles horizontal vertical'
-alt-comma = 'layout accordion horizontal vertical'
-
-# Fullscreen
-alt-f = 'fullscreen'
+alt-shift-k = 'move up'
+alt-shift-l = 'move right'
 
 # Resize
 alt-minus = 'resize smart -50'
 alt-equal = 'resize smart +50'
+
+# Layouts
+alt-slash = 'layout tiles horizontal vertical'
+alt-comma = 'layout accordion horizontal vertical'
+
+# Fullscreen (native macOS fullscreen)
+alt-f = 'fullscreen'
+
+# Float toggle
+alt-shift-f = 'layout floating tiling'
+
+# Move workspace to next/prev monitor
+alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
+
+# Close focused window
+alt-shift-q = 'close'
+
+# Reload config
+alt-shift-r = 'reload-config'
 
 # Workspaces
 alt-1 = 'workspace 1'
@@ -57,30 +77,142 @@ alt-2 = 'workspace 2'
 alt-3 = 'workspace 3'
 alt-4 = 'workspace 4'
 alt-5 = 'workspace 5'
+alt-6 = 'workspace 6'
+alt-7 = 'workspace 7'
+alt-8 = 'workspace 8'
+alt-9 = 'workspace 9'
+alt-t = 'workspace T'
+alt-b = 'workspace B'
+alt-c = 'workspace C'
+alt-m = 'workspace M'
+alt-p = 'workspace P'
+alt-s = 'workspace S'
+alt-z = 'workspace Z'
 
+# Move window to workspace
 alt-shift-1 = 'move-node-to-workspace 1'
 alt-shift-2 = 'move-node-to-workspace 2'
 alt-shift-3 = 'move-node-to-workspace 3'
 alt-shift-4 = 'move-node-to-workspace 4'
 alt-shift-5 = 'move-node-to-workspace 5'
+alt-shift-6 = 'move-node-to-workspace 6'
+alt-shift-7 = 'move-node-to-workspace 7'
+alt-shift-8 = 'move-node-to-workspace 8'
+alt-shift-9 = 'move-node-to-workspace 9'
+alt-shift-t = 'move-node-to-workspace T'
+alt-shift-b = 'move-node-to-workspace B'
+alt-shift-c = 'move-node-to-workspace C'
+alt-shift-m = 'move-node-to-workspace M'
+alt-shift-p = 'move-node-to-workspace P'
+alt-shift-s = 'move-node-to-workspace S'
+alt-shift-z = 'move-node-to-workspace Z'
 
-# Reload config
-alt-shift-semicolon = 'reload-config'
+# Back and forth
+alt-tab = 'workspace-back-and-forth'
 
-# Service mode
+# Enter service mode
 alt-shift-semicolon = 'mode service'
 
+# ── Service mode (window surgery) ────────────────────────────
 [mode.service.binding]
-esc = ['reload-config', 'mode main']
-r = ['flatten-workspace-tree', 'mode main']
+esc       = ['reload-config', 'mode main']
+r         = ['flatten-workspace-tree', 'mode main']
+f         = ['layout floating tiling', 'mode main']
 backspace = ['close-all-windows-but-current', 'mode main']
 
-# Ghostty on workspace 1 — force tiling to fix weird floating behavior
+alt-shift-h = ['join-with left',  'mode main']
+alt-shift-j = ['join-with down',  'mode main']
+alt-shift-k = ['join-with up',    'mode main']
+alt-shift-l = ['join-with right', 'mode main']
+
+# ── App workspace assignments ─────────────────────────────────
+# T — Terminal
 [[on-window-detected]]
 if.app-id = 'com.mitchellh.ghostty'
-run = ['layout tiling', 'move-node-to-workspace 1']
+run = 'move-node-to-workspace T'
 
-# Browser on workspace 2
 [[on-window-detected]]
-if.app-name-regex-substring = 'Firefox|Chrome|Safari|Arc'
-run = 'move-node-to-workspace 2'
+if.app-id = 'com.googlecode.iterm2'
+run = 'move-node-to-workspace T'
+
+# B — Browser (Brave)
+[[on-window-detected]]
+if.app-id = 'com.brave.Browser'
+run = 'move-node-to-workspace B'
+
+# C — Chrome
+[[on-window-detected]]
+if.app-id = 'com.google.Chrome'
+run = 'move-node-to-workspace C'
+
+# M — Messaging
+[[on-window-detected]]
+if.app-id = 'com.pumble.desktop'
+run = 'move-node-to-workspace M'
+
+[[on-window-detected]]
+if.app-id = 'net.whatsapp.WhatsApp'
+run = 'move-node-to-workspace M'
+
+[[on-window-detected]]
+if.app-id = 'com.tinyspeck.slackmacgap'
+run = 'move-node-to-workspace M'
+
+# S — Spotify
+[[on-window-detected]]
+if.app-id = 'com.spotify.client'
+run = 'move-node-to-workspace S'
+
+# Z — Zoom
+[[on-window-detected]]
+if.app-id = 'us.zoom.xos'
+run = 'move-node-to-workspace Z'
+
+# P — Programming
+[[on-window-detected]]
+if.app-id = 'com.google.android.studio'
+run = 'move-node-to-workspace P'
+
+[[on-window-detected]]
+if.app-id = 'com.usebruno.app'
+run = 'move-node-to-workspace P'
+
+[[on-window-detected]]
+if.app-id = 'org.jkiss.dbeaver.core.product'
+run = 'move-node-to-workspace P'
+
+[[on-window-detected]]
+if.app-id = 'com.docker.docker'
+run = 'move-node-to-workspace P'
+
+[[on-window-detected]]
+if.app-id = 'com.github.GitHubClient'
+run = 'move-node-to-workspace P'
+
+[[on-window-detected]]
+if.app-id = 'com.oracle.workbench.MySQLWorkbench'
+run = 'move-node-to-workspace P'
+
+[[on-window-detected]]
+if.app-id = 'com.install4j.8153-2964-2028-4488-3.23'
+run = 'move-node-to-workspace P'
+
+[[on-window-detected]]
+if.app-id = 'tech.bitflex.parquetviewer'
+run = 'move-node-to-workspace P'
+
+[[on-window-detected]]
+if.app-id = 'com.postmanlabs.mac'
+run = 'move-node-to-workspace P'
+
+[[on-window-detected]]
+if.app-id = 'org.RedisLabs.RedisInsight-V2'
+run = 'move-node-to-workspace P'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.dt.Xcode'
+run = 'move-node-to-workspace P'
+
+[[on-window-detected]]
+if.app-id = 'dev.zed.Zed'
+run = 'move-node-to-workspace P'
